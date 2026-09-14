@@ -15,6 +15,25 @@ I built this project to practice Python, HTTP requests, error handling, regular 
 * Follow redirects
 * Handle common request errors
 
+
+Each finding can have one of three statuses:
+
+```text
+OK       → 100% of points
+WEAK     → 50% of points
+MISSING  → 0% of points
+```
+
+## Severity Points
+
+```text
+High     → 30 points
+Medium   → 15 points
+Low      → 5 points
+```
+
+The final score is calculated from the points earned compared to the total possible points.
+
 ## Security Headers Checked
 
 The scanner currently checks:
@@ -184,7 +203,7 @@ geolocation
 
 ---
 
-## Quick Summary
+## Quick Summary of the Headers
 
 | Header                     | Simple idea                    |
 | -------------------------- | ------------------------------ |
@@ -195,24 +214,8 @@ geolocation
 | **Referrer-Policy**        | Control URL information shared |
 | **Permissions-Policy**     | Control browser features       |
 
+---
 
-Each finding can have one of three statuses:
-
-```text
-OK       → 100% of points
-WEAK     → 50% of points
-MISSING  → 0% of points
-```
-
-## Severity Points
-
-```text
-High     → 30 points
-Medium   → 15 points
-Low      → 5 points
-```
-
-The final score is calculated from the points earned compared to the total possible points.
 
 ## Requirements
 

@@ -26,6 +26,176 @@ The scanner currently checks:
 * `Referrer-Policy`
 * `Permissions-Policy`
 
+
+## Security Headers Detailed Description
+
+### 1. `Strict-Transport-Security` (HSTS)
+
+> "Always use HTTPS when connecting to me."
+
+Example:
+
+```text
+Strict-Transport-Security: max-age=31536000
+```
+
+This tells the browser to remember for `31536000` seconds (1 year) that the website should only be accessed through HTTPS.
+
+**Protects against:** HTTP downgrade / certain man-in-the-middle attacks.
+
+---
+
+### 2. `Content-Security-Policy` (CSP)
+
+> "Only load scripts, images, styles, etc. from sources I allow."
+
+Example:
+
+```text
+Content-Security-Policy: default-src 'self'
+```
+
+`'self'` means the browser should generally load resources only from the same website.
+
+For example, if an attacker injects:
+
+```html
+<script src="https://evil.com/script.js"></script>
+```
+
+a restrictive CSP can tell the browser **not to load it**.
+
+**Protects against:** Mainly XSS and malicious resource injection.
+
+---
+
+### 3. `X-Content-Type-Options`
+
+> "Don't try to guess the type of this file."
+
+Example:
+
+```text
+X-Content-Type-Options: nosniff
+```
+
+Suppose the server says:
+
+```text
+Content-Type: text/plain
+```
+
+The browser should respect that instead of trying to interpret the content as something else.
+
+**Protects against:** MIME-type confusion / MIME sniffing attacks.
+
+---
+
+### 4. `X-Frame-Options`
+
+> "Don't allow other websites to put my page inside a frame."
+
+Example:
+
+```text
+X-Frame-Options: DENY
+```
+
+Imagine an attacker creates:
+
+```html
+<iframe src="https://bank.com"></iframe>
+```
+
+`DENY` tells the browser that `bank.com` should **not be displayed inside a frame**.
+
+**Protects against:** Clickjacking.
+
+Common values:
+
+```text
+DENY
+SAMEORIGIN
+```
+
+* `DENY` → don't allow framing anywhere
+* `SAMEORIGIN` → allow framing only by the same origin
+
+---
+
+### 5. `Referrer-Policy`
+
+> "Control how much information about the previous URL is sent when navigating to another website."
+
+Example:
+
+```text
+Referrer-Policy: strict-origin-when-cross-origin
+```
+
+Suppose you're visiting:
+
+```text
+https://example.com/account/settings
+```
+
+and click a link to:
+
+```text
+https://other-site.com
+```
+
+The browser may send referrer information.
+
+The policy controls **how much of the original URL is shared**.
+
+**Protects against:** Unnecessary URL/path information leaking to other websites.
+
+---
+
+### 6. `Permissions-Policy`
+
+> "Control which browser features websites are allowed to use."
+
+Example:
+
+```text
+Permissions-Policy: camera=(), microphone=()
+```
+
+This tells the browser:
+
+```text
+Camera     → not allowed
+Microphone → not allowed
+```
+
+So even if some page tries to request access to the camera or microphone, the policy can prevent that feature from being used.
+
+It can also control features such as:
+
+```text
+camera
+microphone
+geolocation
+```
+
+**Protects against:** Unnecessary or unwanted use of powerful browser features.
+
+---
+
+## Quick Summary
+
+| Header                     | Simple idea                    |
+| -------------------------- | ------------------------------ |
+| **HSTS**                   | HTTPS only                     |
+| **CSP**                    | Only allow trusted resources   |
+| **X-Content-Type-Options** | Don't guess file type          |
+| **X-Frame-Options**        | Don't let others frame my site |
+| **Referrer-Policy**        | Control URL information shared |
+| **Permissions-Policy**     | Control browser features       |
+
+
 Each finding can have one of three statuses:
 
 ```text
